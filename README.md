@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# Nested Comments App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based nested comments component with persistent storage using local-first approach.
 
-Currently, two official plugins are available:
+## Component Architecture
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+App
+├── CommentInput
+└── CommentsContainer
+    └── CommentItem
+        ├── CommentInput 
+        └── CommentItem (nested)
+                └── ...
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Data Flow
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```
+useComments Hook
+    │
+    ├─→ useLiveQuery (Dexie)
+    │       │
+    │       └─→ IndexedDB (CommentsDb)
+    │               └── comments table
+    │                   ├── id (primary key)
+    │                   ├── text
+    │                   └── parentId (optional)
+    │
+    └─→ Build tree structure from flat array
+            │
+            └─→ CommentsContainer
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher recommended)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd react-app
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+### Running Locally
+
+Start the development server:
+```bash
+npm run dev
+```
+
+Open your browser and navigate to `http://localhost:5173`
+
+## Project Structure
+
+```
+src/
+├── App.tsx              # Main application component
+├── CommentsContainer.tsx # Container for root comments
+├── CommentItem.tsx      # Individual comment with nested children
+├── CommentInput.tsx     # Input field for adding comments
+├── useComments.tsx      # Hook for fetching and transforming comment data
+└── db.ts               # Dexie database configuration
 ```
