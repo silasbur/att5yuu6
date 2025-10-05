@@ -18,8 +18,8 @@ function CommentItem({
   }
 
   function hasVisibleChildren(comment: CommentWithChildren): boolean {
-    return comment.children.some(child =>
-      !child.isDeleted || hasVisibleChildren(child)
+    return comment.children.some(
+      (child) => !child.isDeleted || hasVisibleChildren(child)
     );
   }
 
@@ -28,33 +28,36 @@ function CommentItem({
   }
 
   return (
-    <div className="pl-2">
-      <div className="font-medium p-2 bg-white relative">
-        <div className="pr-8 break-words">
-          {comment.isDeleted ? '[deleted]' : comment.text}
+    <>
+      <div className="pb-2">
+        <div className="font-medium p-2 bg-gray-200 relative rounded-md">
+          <div className="px-2 break-words">
+            {comment.isDeleted ? "[deleted]" : comment.text}
+          </div>
+          {!comment.isDeleted && (
+            <button onClick={deleteComment} className="absolute top-2 right-2 text-sm font-medium text-gray-500">
+              x
+            </button>
+          )}
         </div>
-        {!comment.isDeleted && (
-          <button
-            onClick={deleteComment}
-            className="absolute top-2 right-2"
-          >
-            X
-          </button>
+        {commentingId !== comment.id && (
+          <div className="flex justify-end">
+            <button onClick={() => updateCommentingId(comment.id)} className="text-sm font-medium text-gray-500">
+              Comment
+            </button>
+          </div>
+        )}
+
+        {commentingId === comment.id && (
+          <CommentInput
+            updateCommentingId={updateCommentingId}
+            parentId={comment.id}
+          />
         )}
       </div>
-      {commentingId !== comment.id && (
-        <div className="flex justify-end">
-          <button onClick={() => updateCommentingId(comment.id)}>comment</button>
-        </div>
-      )}
-      {commentingId === comment.id && (
-        <CommentInput
-          onComment={() => updateCommentingId("")}
-          parentId={comment.id}
-        />
-      )}
+
       {comment.children.length > 0 && (
-        <div className="border-l-2 border-gray-300 pl-2 space-y-2">
+        <div className="border-l-2 border-gray-300 border-dotted pl-2 ml-8 space-y-2">
           {comment.children.map((child) => (
             <CommentItem
               key={child.id}
@@ -65,7 +68,7 @@ function CommentItem({
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
 

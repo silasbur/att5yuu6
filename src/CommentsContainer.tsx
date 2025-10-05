@@ -11,7 +11,7 @@ function CommentsContainer() {
   const commentTree = useComments();
 
   return commentTree.length === 0 ? null : (
-    <div className="bg-gray-200 w-160 p-2 space-y-2">
+    <div className="w-full space-y-2">
       {commentTree.map((comment) => (
         <CommentItem key={comment.id} comment={comment} commentingId={commentingId} updateCommentingId={updateCommentingId} />
       ))}
