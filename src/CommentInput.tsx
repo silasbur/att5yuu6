@@ -3,10 +3,10 @@ import { db } from "./db";
 
 interface CommentInputProps {
   parentId?: string;
-  updateCommentingId?: (id: string) => void;
+  hideInput?: () => void;
 }
 
-function CommentInput({ parentId, updateCommentingId }: CommentInputProps) {
+function CommentInput({ parentId, hideInput }: CommentInputProps) {
   const [text, setText] = useState("");
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -19,15 +19,13 @@ function CommentInput({ parentId, updateCommentingId }: CommentInputProps) {
       setText("");
     }
 
-    // Hides reply input when comment is submitted
-    updateCommentingId && updateCommentingId("");
+    // Hiding here doesn't apply to root level input
+    hideInput && hideInput();
   }
 
   function handleCancel() {
     setText("");
-
-    // Hides reply input when comment is cancelled
-    updateCommentingId && updateCommentingId("");
+    hideInput && hideInput();
   }
 
   return (

@@ -23,6 +23,10 @@ function CommentItem({
     );
   }
 
+  function hideInput() {
+    updateCommentingId("")
+  }
+
   if (comment.isDeleted && !hasVisibleChildren(comment)) {
     return null;
   }
@@ -31,7 +35,7 @@ function CommentItem({
     <>
       <div className="pb-2">
         <div className="font-medium p-2 bg-gray-200 relative rounded-md">
-          <div className="px-2 break-words">
+          <div className="px-2 break-words text-gray-900">
             {comment.isDeleted ? "[deleted]" : comment.text}
           </div>
           {!comment.isDeleted && (
@@ -43,14 +47,14 @@ function CommentItem({
         {commentingId !== comment.id && (
           <div className="flex justify-end">
             <button onClick={() => updateCommentingId(comment.id)} className="text-sm font-medium text-gray-500">
-              Comment
+              Reply
             </button>
           </div>
         )}
 
         {commentingId === comment.id && (
           <CommentInput
-            updateCommentingId={updateCommentingId}
+            hideInput={hideInput}
             parentId={comment.id}
           />
         )}
