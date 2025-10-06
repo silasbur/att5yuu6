@@ -8,8 +8,8 @@ A React-based nested comments component with persistent storage using local-firs
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd react-app
+git clone https://github.com/silasbur/att5yuu6
+cd att5yuu6
 ```
 
 2. Install dependencies:
