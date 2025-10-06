@@ -19,7 +19,7 @@ function CommentInput({ parentId, hideInput }: CommentInputProps) {
       setText("");
     }
 
-    // Hiding here doesn't apply to root level input
+    // Hiding here doesn't apply to top level input
     hideInput && hideInput();
   }
 

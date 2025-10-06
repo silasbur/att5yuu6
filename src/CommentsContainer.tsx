@@ -13,7 +13,12 @@ function CommentsContainer() {
   return commentTree.length === 0 ? null : (
     <div className="w-full space-y-2">
       {commentTree.map((comment) => (
-        <CommentItem key={comment.id} comment={comment} commentingId={commentingId} updateCommentingId={updateCommentingId} />
+        <CommentItem
+          key={comment.id}
+          comment={comment}
+          commentingId={commentingId}
+          updateCommentingId={updateCommentingId}
+        />
       ))}
     </div>
   );

@@ -39,9 +39,7 @@ function CommentItem({
       <div className="pb-2">
         {/* Comment box */}
         <div className="font-medium p-2 bg-gray-200 relative rounded-md">
-          <div className="px-2 break-words text-gray-900">
-            {commentText}
-          </div>
+          <div className="px-2 break-words text-gray-900">{commentText}</div>
           {!comment.isDeleted && (
             <button
               onClick={handleDelete}
@@ -66,10 +64,7 @@ function CommentItem({
 
         {/* Reply input */}
         {isReplying && (
-          <CommentInput
-            hideInput={handleHideInput}
-            parentId={comment.id}
-          />
+          <CommentInput hideInput={handleHideInput} parentId={comment.id} />
         )}
       </div>
 

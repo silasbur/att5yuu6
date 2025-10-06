@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import CommentItem from './CommentItem';
-import type { CommentWithChildren } from './useComments';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import CommentItem from "./CommentItem";
+import type { CommentWithChildren } from "./useComments";
 
 // Mock the db module
-vi.mock('./db', () => ({
+vi.mock("./db", () => ({
   db: {
     comments: {
       update: vi.fn(),
@@ -14,22 +14,22 @@ vi.mock('./db', () => ({
 }));
 
 // Mock CommentInput component to avoid circular dependencies
-vi.mock('./CommentInput', () => ({
+vi.mock("./CommentInput", () => ({
   default: () => <div data-testid="comment-input">CommentInput</div>,
 }));
 
-describe('CommentItem', () => {
+describe("CommentItem", () => {
   const mockUpdateCommentingId = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('rendering normal comments', () => {
-    it('renders comment text and delete button for non-deleted comment', () => {
+  describe("rendering normal comments", () => {
+    it("renders comment text and delete button for non-deleted comment", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Test comment',
+        id: "1",
+        text: "Test comment",
         children: [],
       };
 
@@ -41,14 +41,14 @@ describe('CommentItem', () => {
         />
       );
 
-      expect(screen.getByText('Test comment')).toBeInTheDocument();
-      expect(screen.getByText('x')).toBeInTheDocument();
+      expect(screen.getByText("Test comment")).toBeInTheDocument();
+      expect(screen.getByText("x")).toBeInTheDocument();
     });
 
-    it('shows comment button when not currently commenting', () => {
+    it("shows comment button when not currently commenting", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Test comment',
+        id: "1",
+        text: "Test comment",
         children: [],
       };
 
@@ -60,13 +60,13 @@ describe('CommentItem', () => {
         />
       );
 
-      expect(screen.getByText('Reply')).toBeInTheDocument();
+      expect(screen.getByText("Reply")).toBeInTheDocument();
     });
 
-    it('shows CommentInput when commentingId matches comment id', () => {
+    it("shows CommentInput when commentingId matches comment id", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Test comment',
+        id: "1",
+        text: "Test comment",
         children: [],
       };
 
@@ -78,15 +78,15 @@ describe('CommentItem', () => {
         />
       );
 
-      expect(screen.getByTestId('comment-input')).toBeInTheDocument();
+      expect(screen.getByTestId("comment-input")).toBeInTheDocument();
     });
   });
 
-  describe('soft delete behavior', () => {
-    it('renders [deleted] text for deleted comment', () => {
+  describe("soft delete behavior", () => {
+    it("renders [deleted] text for deleted comment", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Test comment',
+        id: "1",
+        text: "Test comment",
         isDeleted: true,
         children: [],
       };
@@ -103,16 +103,16 @@ describe('CommentItem', () => {
       expect(container.firstChild).toBeNull();
     });
 
-    it('hides delete button for deleted comment', () => {
+    it("hides delete button for deleted comment", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Test comment',
+        id: "1",
+        text: "Test comment",
         isDeleted: true,
         hasVisibleChildren: true,
         children: [
           {
-            id: '2',
-            text: 'Child comment',
+            id: "2",
+            text: "Child comment",
             children: [],
             hasVisibleChildren: false,
           },
@@ -127,18 +127,18 @@ describe('CommentItem', () => {
         />
       );
 
-      expect(screen.getByText('[deleted]')).toBeInTheDocument();
-      expect(screen.getByText('Child comment')).toBeInTheDocument();
+      expect(screen.getByText("[deleted]")).toBeInTheDocument();
+      expect(screen.getByText("Child comment")).toBeInTheDocument();
       // The child comment should have a delete button, but parent should not
-      const deleteButtons = screen.getAllByText('x');
+      const deleteButtons = screen.getAllByText("x");
       expect(deleteButtons).toHaveLength(1); // Only child has delete button
     });
 
-    it('calls db.comments.update when delete button is clicked', async () => {
-      const { db } = await import('./db');
+    it("calls db.comments.update when delete button is clicked", async () => {
+      const { db } = await import("./db");
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Test comment',
+        id: "1",
+        text: "Test comment",
         children: [],
       };
 
@@ -150,17 +150,17 @@ describe('CommentItem', () => {
         />
       );
 
-      await userEvent.click(screen.getByText('x'));
+      await userEvent.click(screen.getByText("x"));
 
-      expect(db.comments.update).toHaveBeenCalledWith('1', { isDeleted: true });
+      expect(db.comments.update).toHaveBeenCalledWith("1", { isDeleted: true });
     });
   });
 
-  describe('hasVisibleChildren logic', () => {
-    it('hides deleted comment with no children', () => {
+  describe("hasVisibleChildren logic", () => {
+    it("hides deleted comment with no children", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Test comment',
+        id: "1",
+        text: "Test comment",
         isDeleted: true,
         children: [],
       };
@@ -176,16 +176,16 @@ describe('CommentItem', () => {
       expect(container.firstChild).toBeNull();
     });
 
-    it('shows deleted comment with non-deleted children', () => {
+    it("shows deleted comment with non-deleted children", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Parent comment',
+        id: "1",
+        text: "Parent comment",
         isDeleted: true,
         hasVisibleChildren: true,
         children: [
           {
-            id: '2',
-            text: 'Child comment',
+            id: "2",
+            text: "Child comment",
             isDeleted: false,
             children: [],
             hasVisibleChildren: false,
@@ -201,19 +201,19 @@ describe('CommentItem', () => {
         />
       );
 
-      expect(screen.getByText('[deleted]')).toBeInTheDocument();
-      expect(screen.getByText('Child comment')).toBeInTheDocument();
+      expect(screen.getByText("[deleted]")).toBeInTheDocument();
+      expect(screen.getByText("Child comment")).toBeInTheDocument();
     });
 
-    it('hides deleted comment when all children are also deleted', () => {
+    it("hides deleted comment when all children are also deleted", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Parent comment',
+        id: "1",
+        text: "Parent comment",
         isDeleted: true,
         children: [
           {
-            id: '2',
-            text: 'Child comment',
+            id: "2",
+            text: "Child comment",
             isDeleted: true,
             children: [],
           },
@@ -231,22 +231,22 @@ describe('CommentItem', () => {
       expect(container.firstChild).toBeNull();
     });
 
-    it('shows deleted comment when it has visible descendants (grandchildren)', () => {
+    it("shows deleted comment when it has visible descendants (grandchildren)", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Grandparent',
+        id: "1",
+        text: "Grandparent",
         isDeleted: true,
         hasVisibleChildren: true,
         children: [
           {
-            id: '2',
-            text: 'Parent',
+            id: "2",
+            text: "Parent",
             isDeleted: true,
             hasVisibleChildren: true,
             children: [
               {
-                id: '3',
-                text: 'Child',
+                id: "3",
+                text: "Child",
                 isDeleted: false,
                 children: [],
                 hasVisibleChildren: false,
@@ -265,25 +265,25 @@ describe('CommentItem', () => {
       );
 
       // Both grandparent and parent show as [deleted]
-      const deletedElements = screen.getAllByText('[deleted]');
+      const deletedElements = screen.getAllByText("[deleted]");
       expect(deletedElements).toHaveLength(2);
-      expect(screen.getByText('Child')).toBeInTheDocument();
+      expect(screen.getByText("Child")).toBeInTheDocument();
     });
 
-    it('hides deleted comment when all descendants are deleted', () => {
+    it("hides deleted comment when all descendants are deleted", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Grandparent',
+        id: "1",
+        text: "Grandparent",
         isDeleted: true,
         children: [
           {
-            id: '2',
-            text: 'Parent',
+            id: "2",
+            text: "Parent",
             isDeleted: true,
             children: [
               {
-                id: '3',
-                text: 'Child',
+                id: "3",
+                text: "Child",
                 isDeleted: true,
                 children: [],
               },
@@ -304,20 +304,20 @@ describe('CommentItem', () => {
     });
   });
 
-  describe('nested rendering', () => {
-    it('renders nested children correctly', () => {
+  describe("nested rendering", () => {
+    it("renders nested children correctly", () => {
       const comment: CommentWithChildren = {
-        id: '1',
-        text: 'Parent',
+        id: "1",
+        text: "Parent",
         children: [
           {
-            id: '2',
-            text: 'Child 1',
+            id: "2",
+            text: "Child 1",
             children: [],
           },
           {
-            id: '3',
-            text: 'Child 2',
+            id: "3",
+            text: "Child 2",
             children: [],
           },
         ],
@@ -331,9 +331,9 @@ describe('CommentItem', () => {
         />
       );
 
-      expect(screen.getByText('Parent')).toBeInTheDocument();
-      expect(screen.getByText('Child 1')).toBeInTheDocument();
-      expect(screen.getByText('Child 2')).toBeInTheDocument();
+      expect(screen.getByText("Parent")).toBeInTheDocument();
+      expect(screen.getByText("Child 1")).toBeInTheDocument();
+      expect(screen.getByText("Child 2")).toBeInTheDocument();
     });
   });
 });
