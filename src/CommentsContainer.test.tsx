@@ -55,8 +55,8 @@ describe('CommentsContainer', async () => {
 
       render(<CommentsContainer />);
 
-      // Click "comment" button on first comment
-      const commentButtons = screen.getAllByText('comment');
+      // Click "Reply" button on first comment
+      const commentButtons = screen.getAllByText('Reply');
       await userEvent.click(commentButtons[0]);
 
       // Only first comment should show CommentInput
@@ -75,7 +75,7 @@ describe('CommentsContainer', async () => {
 
       render(<CommentsContainer />);
 
-      const commentButtons = screen.getAllByText('comment');
+      const commentButtons = screen.getAllByText('Reply');
 
       // Click first comment
       await userEvent.click(commentButtons[0]);
@@ -120,7 +120,7 @@ describe('CommentsContainer', async () => {
 
       render(<CommentsContainer />);
 
-      const commentButtons = screen.getAllByText('comment');
+      const commentButtons = screen.getAllByText('Reply');
 
       // Click parent comment
       await userEvent.click(commentButtons[0]);
@@ -165,7 +165,7 @@ describe('CommentsContainer', async () => {
 
       render(<CommentsContainer />);
 
-      const commentButtons = screen.getAllByText('comment');
+      const commentButtons = screen.getAllByText('Reply');
 
       // Click grandchild
       await userEvent.click(commentButtons[2]);

@@ -5,6 +5,7 @@ import {useMemo } from "react"
 
 export interface CommentWithChildren extends Comment {
   children: CommentWithChildren[];
+  hasVisibleChildren?: boolean;
 }
 
 export function buildCommentTree(flatComments: Comment[]): CommentWithChildren[] {
@@ -28,6 +29,21 @@ export function buildCommentTree(flatComments: Comment[]): CommentWithChildren[]
       roots.push(commentWithChildren)
     }
   })
+
+  // Compute visibility bottom-up
+  function computeVisibility(comment: CommentWithChildren): boolean {
+    // First, recursively compute for all children
+    comment.children.forEach(child => computeVisibility(child));
+
+    // Then compute for this node
+    const hasVisible = comment.children.some(child =>
+      !child.isDeleted || child.hasVisibleChildren
+    );
+    comment.hasVisibleChildren = hasVisible;
+    return hasVisible;
+  }
+
+  roots.forEach(computeVisibility);
 
   return roots;
 }

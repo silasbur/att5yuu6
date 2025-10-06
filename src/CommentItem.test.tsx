@@ -42,7 +42,7 @@ describe('CommentItem', () => {
       );
 
       expect(screen.getByText('Test comment')).toBeInTheDocument();
-      expect(screen.getByText('X')).toBeInTheDocument();
+      expect(screen.getByText('x')).toBeInTheDocument();
     });
 
     it('shows comment button when not currently commenting', () => {
@@ -60,7 +60,7 @@ describe('CommentItem', () => {
         />
       );
 
-      expect(screen.getByText('comment')).toBeInTheDocument();
+      expect(screen.getByText('Reply')).toBeInTheDocument();
     });
 
     it('shows CommentInput when commentingId matches comment id', () => {
@@ -108,11 +108,13 @@ describe('CommentItem', () => {
         id: '1',
         text: 'Test comment',
         isDeleted: true,
+        hasVisibleChildren: true,
         children: [
           {
             id: '2',
             text: 'Child comment',
             children: [],
+            hasVisibleChildren: false,
           },
         ],
       };
@@ -128,7 +130,7 @@ describe('CommentItem', () => {
       expect(screen.getByText('[deleted]')).toBeInTheDocument();
       expect(screen.getByText('Child comment')).toBeInTheDocument();
       // The child comment should have a delete button, but parent should not
-      const deleteButtons = screen.getAllByText('X');
+      const deleteButtons = screen.getAllByText('x');
       expect(deleteButtons).toHaveLength(1); // Only child has delete button
     });
 
@@ -148,7 +150,7 @@ describe('CommentItem', () => {
         />
       );
 
-      await userEvent.click(screen.getByText('X'));
+      await userEvent.click(screen.getByText('x'));
 
       expect(db.comments.update).toHaveBeenCalledWith('1', { isDeleted: true });
     });
@@ -179,12 +181,14 @@ describe('CommentItem', () => {
         id: '1',
         text: 'Parent comment',
         isDeleted: true,
+        hasVisibleChildren: true,
         children: [
           {
             id: '2',
             text: 'Child comment',
             isDeleted: false,
             children: [],
+            hasVisibleChildren: false,
           },
         ],
       };
@@ -232,17 +236,20 @@ describe('CommentItem', () => {
         id: '1',
         text: 'Grandparent',
         isDeleted: true,
+        hasVisibleChildren: true,
         children: [
           {
             id: '2',
             text: 'Parent',
             isDeleted: true,
+            hasVisibleChildren: true,
             children: [
               {
                 id: '3',
                 text: 'Child',
                 isDeleted: false,
                 children: [],
+                hasVisibleChildren: false,
               },
             ],
           },

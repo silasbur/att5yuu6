@@ -17,7 +17,7 @@ describe('buildCommentTree', () => {
       const tree = buildCommentTree(flat);
 
       expect(tree).toEqual([
-        { id: '1', text: 'Root comment', children: [] }
+        { id: '1', text: 'Root comment', children: [], hasVisibleChildren: false }
       ]);
     });
 
@@ -31,9 +31,9 @@ describe('buildCommentTree', () => {
       const tree = buildCommentTree(flat);
 
       expect(tree).toHaveLength(3);
-      expect(tree[0]).toEqual({ id: '1', text: 'Root 1', children: [] });
-      expect(tree[1]).toEqual({ id: '2', text: 'Root 2', children: [] });
-      expect(tree[2]).toEqual({ id: '3', text: 'Root 3', children: [] });
+      expect(tree[0]).toEqual({ id: '1', text: 'Root 1', children: [], hasVisibleChildren: false });
+      expect(tree[1]).toEqual({ id: '2', text: 'Root 2', children: [], hasVisibleChildren: false });
+      expect(tree[2]).toEqual({ id: '3', text: 'Root 3', children: [], hasVisibleChildren: false });
     });
   });
 
@@ -52,9 +52,10 @@ describe('buildCommentTree', () => {
         id: '1',
         text: 'Parent',
         children: [
-          { id: '2', text: 'Child 1', parentId: '1', children: [] },
-          { id: '3', text: 'Child 2', parentId: '1', children: [] }
-        ]
+          { id: '2', text: 'Child 1', parentId: '1', children: [], hasVisibleChildren: false },
+          { id: '3', text: 'Child 2', parentId: '1', children: [], hasVisibleChildren: false }
+        ],
+        hasVisibleChildren: true
       });
     });
 
@@ -83,10 +84,14 @@ describe('buildCommentTree', () => {
               id: '4',
               text: 'Great-grandchild',
               parentId: '3',
-              children: []
-            }]
-          }]
-        }]
+              children: [],
+              hasVisibleChildren: false
+            }],
+            hasVisibleChildren: true
+          }],
+          hasVisibleChildren: true
+        }],
+        hasVisibleChildren: true
       }]);
     });
 
@@ -132,7 +137,8 @@ describe('buildCommentTree', () => {
       expect(tree[0]).toEqual({
         id: '1',
         text: 'Root',
-        children: []
+        children: [],
+        hasVisibleChildren: false
       });
     });
 
@@ -157,9 +163,12 @@ describe('buildCommentTree', () => {
             id: '3',
             text: 'Grandchild',
             parentId: '2',
-            children: []
-          }]
-        }]
+            children: [],
+            hasVisibleChildren: false
+          }],
+          hasVisibleChildren: true
+        }],
+        hasVisibleChildren: true
       }]);
     });
 
@@ -180,8 +189,10 @@ describe('buildCommentTree', () => {
           text: 'Child',
           parentId: '1',
           isDeleted: false,
-          children: []
-        }]
+          children: [],
+          hasVisibleChildren: false
+        }],
+        hasVisibleChildren: true
       }]);
     });
 
